@@ -1,0 +1,103 @@
+﻿@model Notice.Models.NoticeData
+@{
+    ViewData["Title"] = "Notice";
+
+}
+<!DOCTYPE html>
+
+
+<script>
+    var aURL = "https://localhost:44398/";
+
+    postData("Home/GetNoticeData", "", "GetNotice", "Notice");
+
+    function postData(api, inputData, aBy, aTyp) {
+        $.ajax({
+            type: "POST",
+            url: aURL + api,
+            data: JSON.stringify(inputData),
+            dataType: "JSON",
+            contentType: "application/json; charset=utf-8",
+            // headers: headerData,
+            success: function (data) {
+
+                PostDone(data, aBy, aTyp);
+            },
+            error: function (err) {
+                alert("Something went wrong");
+            }
+        });
+    }
+
+    PostDone = function (data, aBy, aTyp) {
+
+        if (aTyp === "Notice") {
+            if (aBy === "GetNotice") {
+                $('#noticeData').empty();
+                $.each(data, function (Key, value) {
+
+                    $('#noticeData').append('<tr><td>' + value.Title + '</td><td>' + value.Url + '</td><td>' + value.UrlType + '</td></tr>');
+                });
+
+            }
+
+
+
+        }
+
+
+
+
+    }
+
+
+</script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Notice</title>
+
+</head>
+<body>
+    <h2>Notice</h2>
+    <br />
+    <div>
+
+        <br />
+        <table class="table table-hover table-striped dataTable" id="NoticeTable">
+            <thead style="background-color:#ffc107 !important">
+                <tr>
+                    <th>S.No</th>
+                    <th scope="col" >Title</th>
+                    <th scope="col">Url</th>
+                    <th scope="col">Url Type</th>
+                </tr>
+            </thead>
+            @*<tbody id="noticeData"></tbody>*@
+            <tbody>
+                @{int i = 1; }
+                @foreach (var item in Model.noticeDetails)
+                {
+                    <tr>
+                        <td>@(i++)</td>
+                        <td>@item.Title</td>
+                        <td>@item.Url</td>
+                        <td>@item.UrlType</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#NoticeTable').DataTable();
+        });
+    </script>
+
+
+</body>
+
+
+
+</html>
